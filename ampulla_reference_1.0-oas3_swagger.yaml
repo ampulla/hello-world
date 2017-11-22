@@ -1,0 +1,151 @@
+openapi: 3.0.0
+servers:
+  - url: 'https://reference.azure.net/v1/'
+info:
+  version: "1.0-oas3"
+  title: Reference
+  description: >
+    The Reference API allows you to easily access a list of supported Countries,
+    States, TimeZones and Currencies.
+paths:
+  /Countries:
+    get:
+      summary: Getting All Countries
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Country'
+  /TimeZones:
+    get:
+      summary: Getting All Time Zones
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TimeZone'
+  /Currencies:
+    get:
+      summary: Getting All Currencies
+      description: Currency resources are returned in ascending alphabetical order by Code.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Currency'
+components:
+  schemas:
+    Country:
+      type: object
+      example:
+        Id: 1
+        Code: CA
+        Name: Canada
+        Version: 1
+        States:
+          - Name: Alberta
+            Code: AB
+      properties:
+        Id:
+          description: Identifier
+          type: integer
+          format: int32
+        Code:
+          description: Country Code. Uses the ISO 3166-1 alpha-2 standard
+          type: string
+        Name:
+          description: Country name
+          type: string
+        Version:
+          description: Latest version number
+          type: integer
+          format: int32
+        States:
+          description: States/Provinces
+          type: array
+          items:
+            $ref: '#/components/schemas/State'
+    State:
+      type: object
+      example:
+        Name: Alberta
+        Code: AB
+        Id: 0
+        CountryCode: ''
+      properties:
+        Name:
+          description: Country name
+          type: string
+        Code:
+          description: State/Province Code. Based off the ISO 3166-2 standard
+          type: string
+        Id:
+          description: Reserved for future use
+          type: integer
+          format: int32
+        CountryCode:
+          description: Reserved for future use
+          type: string
+    TimeZone:
+      type: object
+      example:
+        Id: Alaskan Standard Time
+        Name: '(UTC-09:00) Alaska'
+        SupportsDaylightSavingTime: true
+      properties:
+        Id:
+          description: Identifier
+          type: string
+        Name:
+          description: Name
+          type: string
+        SupportsDaylightSavingTime:
+          description: A flag to indicate if this TimeZone observes Daylight Savings Time
+          type: boolean
+    Currency:
+      description: >
+        To represent a Currency symbol in unicode, use the format &#(Code);, for
+        USD this would be $ which is displayed as $    
+      type: object
+      example:
+        Id: 106
+        Name: United States Dollar
+        Code: USD
+        Symbol:
+          - 36
+        Version: 1
+      properties:
+        Id:
+          description: Identifier
+          type: integer
+          format: int32
+        Name:
+          description: Currency Name
+          type: string
+        Code:
+          description: Identifier for the Currency
+          type: string
+        Symbol:
+          description: Unicode decimal value for symbols associated with this currency
+          type: array
+          items:
+            type: integer
+        Version:
+          description: Latest version number
+          type: integer
+          format: int32
+        LanguageNameMap:
+          description: Reserved for future use
+          type: string
